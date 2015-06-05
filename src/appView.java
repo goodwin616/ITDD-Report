@@ -17,6 +17,22 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
+/**
+ * 
+ * 
+ * 			Document doc = new Document();
+			DocumentBuilder builder = new DocumentBuilder(doc);
+			
+			// Paragraph formatting - needs to be updated
+			ParagraphFormat paragraphFormat = builder.getParagraphFormat();
+			paragraphFormat.setFirstLineIndent(8);
+			paragraphFormat.setAlignment(ParagraphAlignment.JUSTIFY
+			
+			builder.writeln(fillIns.get(ans-1));
+			builder.writeln()
+ *
+ */
+
 public class appView {
 
 	class TabHolder {
