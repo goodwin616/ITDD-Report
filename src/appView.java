@@ -10,6 +10,7 @@ import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -20,6 +21,13 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
+
+import com.aspose.words.Document;
+import com.aspose.words.DocumentBuilder;
+import com.aspose.words.Paragraph;
+import com.aspose.words.ParagraphAlignment;
+import com.aspose.words.ParagraphFormat;
+
 
 /**
  * 
@@ -35,8 +43,12 @@ import org.eclipse.swt.widgets.TabItem;
  *
  */
 
+@SuppressWarnings("unused")
 public class appView {
 
+	final Display display = Display.getDefault();
+
+	
 	class TabHolder {
 		private String name;
 		private ArrayList<QGroup> questions;
@@ -121,7 +133,6 @@ public class appView {
 	 * Open the window.
 	 */
 	public void open() {
-		Display display = Display.getDefault();
 		createContents();
 		shell.open();
 		shell.layout();
@@ -137,14 +148,14 @@ public class appView {
 	 */
 	protected void createContents() {
 		shell = new Shell();
-		shell.setSize(480, 534);
+		shell.setSize(480, 616);
 		shell.setText("ITDD");
-		System.out.println("Start parse");
+		System.out.println("Parsing test1.txt");
 		ArrayList<TabHolder> tabList = parseInput();
-		System.out.println("End parse");
-
+		System.out.println("End parse, Launching ITDD Document Creator");
+		
 		TabFolder tabFolder = new TabFolder(shell, SWT.H_SCROLL | SWT.V_SCROLL);
-		tabFolder.setBounds(0, 10, 464, 455);
+		tabFolder.setBounds(0, 10, 464, 527);
 
 		for (int i = 0; i < tabList.size(); i++) {
 
@@ -196,6 +207,13 @@ public class appView {
 		btnCreateDocument.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				
+				try {
+					createDocument(tabList);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				
 				for (int i = 0; i < tabList.size(); i++) {
 					int questionSize = tabList.get(i).getQuestions().size();
 					for (int j = 0; j < questionSize; j++) {
@@ -205,8 +223,17 @@ public class appView {
 							if (tabList.get(i).getQuestions().get(j)
 									.getAnswers().get(k).getButton()
 									.getSelection()) {
-								System.out.println("For Question: " + tabList.get(i).getQuestions().get(j).getQuestion() + ", you selected " + tabList.get(i).getQuestions().get(j).getAnswers().get(k).getAnswer() + " which corresponds to ... " + 
-										tabList.get(i).getQuestions().get(j).getAnswers().get(k).getfillIn());
+								System.out.println("For Question: "
+										+ tabList.get(i).getQuestions().get(j)
+												.getQuestion()
+										+ ", you selected "
+										+ tabList.get(i).getQuestions().get(j)
+												.getAnswers().get(k)
+												.getAnswer()
+										+ " which corresponds to ... "
+										+ tabList.get(i).getQuestions().get(j)
+												.getAnswers().get(k)
+												.getfillIn());
 							}
 						}
 					}
@@ -214,8 +241,38 @@ public class appView {
 
 			}
 		});
-		btnCreateDocument.setBounds(326, 471, 128, 25);
+		btnCreateDocument.setBounds(326, 543, 128, 25);
 		btnCreateDocument.setText("Create Document");
+	}
+
+	public void createDocument(ArrayList<TabHolder> tabList) throws Exception {
+		
+		Document doc = new Document(); 
+		DocumentBuilder builder = new DocumentBuilder(doc);
+		ParagraphFormat paragraphFormat = builder.getParagraphFormat(); 
+		paragraphFormat.setFirstLineIndent(8);
+		paragraphFormat.setAlignment(ParagraphAlignment.JUSTIFY);
+		
+		for (int i = 0; i < tabList.size(); i++) {
+			int questionSize = tabList.get(i).getQuestions().size();
+			for (int j = 0; j < questionSize; j++) {
+				int answerSize = tabList.get(i).getQuestions().get(j)
+						.getAnswers().size();
+				for (int k = 0; k < answerSize; k++) {
+					if (tabList.get(i).getQuestions().get(j).getAnswers()
+							.get(k).getButton().getSelection()) {
+						
+						
+						builder.write(tabList.get(i).getQuestions().get(j).getAnswers()
+								.get(k).getfillIn());
+					}
+				}
+			}
+			builder.writeln();
+		}
+        doc.save("Out.docx");
+
+		return;
 	}
 
 	public ArrayList<TabHolder> parseInput() {
@@ -224,6 +281,7 @@ public class appView {
 		try {
 			// Read in text file
 			FileReader reader = new FileReader(file);
+			@SuppressWarnings("resource")
 			BufferedReader textReader = new BufferedReader(reader);
 			String line = textReader.readLine();
 			if (line == null)
