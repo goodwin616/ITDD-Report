@@ -29,20 +29,6 @@ import com.aspose.words.ParagraphAlignment;
 import com.aspose.words.ParagraphFormat;
 
 
-/**
- * 
- * 
- * Document doc = new Document(); DocumentBuilder builder = new
- * DocumentBuilder(doc);
- * 
- * // Paragraph formatting - needs to be updated ParagraphFormat paragraphFormat
- * = builder.getParagraphFormat(); paragraphFormat.setFirstLineIndent(8);
- * paragraphFormat.setAlignment(ParagraphAlignment.JUSTIFY
- * 
- * builder.writeln(fillIns.get(ans-1)); builder.writeln()
- *
- */
-
 @SuppressWarnings("unused")
 public class appView {
 
@@ -186,11 +172,14 @@ public class appView {
 				group.setLayoutData(gd_group);
 				group.setText(questionList.get(j).getQuestion());
 				group.setLayout(new GridLayout(1, false));
-
-				for (int k = 0; k < questionList.get(j).getAnswers().size(); k++) {
+				int numAns = questionList.get(j).getAnswers().size();
+				for (int k = 0; k < numAns; k++) {
 					Button button = new Button(group, SWT.RADIO);
 					button.setText(questionList.get(j).getAnswers().get(k)
 							.getAnswer());
+					if (k == numAns-1) {
+						button.setSelection(true);
+					}
 					tabList.get(i).getQuestions().get(j).getAnswers().get(k)
 							.setButton(button);
 				}
@@ -289,7 +278,7 @@ public class appView {
 			// ...until there is nothing else to read
 			ArrayList<TabHolder> retVal = new ArrayList<TabHolder>();
 
-			while (!line.equals("END")) {
+			while (!(line.equals("END") || line.equals(null))) {
 				// start tab
 				if (line.equals("*--")) {
 					line = textReader.readLine();
@@ -311,6 +300,7 @@ public class appView {
 										new answerSelections(answer, fillIn));
 								line = textReader.readLine();
 							}
+							g.getAnswers().add(new answerSelections("Not Applicable", ""));
 							tab.getQuestions().add(g);
 							line = textReader.readLine();
 						}
