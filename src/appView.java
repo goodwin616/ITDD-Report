@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -27,11 +28,12 @@ import org.eclipse.swt.widgets.Text;
 
 import com.aspose.words.Document;
 import com.aspose.words.DocumentBuilder;
+import com.aspose.words.Font;
 import com.aspose.words.ParagraphAlignment;
 import com.aspose.words.ParagraphFormat;
+import com.aspose.words.Underline;
 
 
-@SuppressWarnings("unused")
 public class appView {
 
 	final Display display = Display.getDefault();
@@ -145,7 +147,7 @@ public class appView {
 		
 		TabFolder tabFolder = new TabFolder(shell, SWT.H_SCROLL | SWT.V_SCROLL);
 		tabFolder.setBounds(0, 10, 464, 527);
-
+		
 		for (int i = 0; i < tabList.size(); i++) {
 
 			ArrayList<QGroup> questionList = tabList.get(i).getQuestions();
@@ -207,30 +209,31 @@ public class appView {
 					e1.printStackTrace();
 				}
 				
-				for (int i = 0; i < tabList.size(); i++) {
-					int questionSize = tabList.get(i).getQuestions().size();
-					for (int j = 0; j < questionSize; j++) {
-						int answerSize = tabList.get(i).getQuestions().get(j)
-								.getAnswers().size();
-						for (int k = 0; k < answerSize; k++) {
-							if (tabList.get(i).getQuestions().get(j)
-									.getAnswers().get(k).getButton()
-									.getSelection()) {
-								System.out.println("For Question: "
-										+ tabList.get(i).getQuestions().get(j)
-												.getQuestion()
-										+ ", you selected "
-										+ tabList.get(i).getQuestions().get(j)
-												.getAnswers().get(k)
-												.getAnswer()
-										+ " which corresponds to ... "
-										+ tabList.get(i).getQuestions().get(j)
-												.getAnswers().get(k)
-												.getfillIn());
-							}
-						}
-					}
-				}
+//		Print out all answers to command line
+//				for (int i = 0; i < tabList.size(); i++) {
+//					int questionSize = tabList.get(i).getQuestions().size();
+//					for (int j = 0; j < questionSize; j++) {
+//						int answerSize = tabList.get(i).getQuestions().get(j)
+//								.getAnswers().size();
+//						for (int k = 0; k < answerSize; k++) {
+//							if (tabList.get(i).getQuestions().get(j)
+//									.getAnswers().get(k).getButton()
+//									.getSelection()) {
+//								System.out.println("For Question: "
+//										+ tabList.get(i).getQuestions().get(j)
+//												.getQuestion()
+//										+ ", you selected "
+//										+ tabList.get(i).getQuestions().get(j)
+//												.getAnswers().get(k)
+//												.getAnswer()
+//										+ " which corresponds to ... "
+//										+ tabList.get(i).getQuestions().get(j)
+//												.getAnswers().get(k)
+//												.getfillIn());
+//							}
+//						}
+//					}
+//				}
 
 			}
 		});
@@ -239,20 +242,30 @@ public class appView {
 		
 		txtOutputdocx = new Text(shell, SWT.BORDER);
 		txtOutputdocx.setText("output");
-		txtOutputdocx.setBounds(73, 545, 204, 21);
+		txtOutputdocx.setBounds(100, 545, 220, 21);
 		
 		Label lblNewLabel = new Label(shell, SWT.NONE);
-		lblNewLabel.setBounds(10, 548, 55, 15);
-		lblNewLabel.setText("File Name");
+		lblNewLabel.setBounds(10, 548, 88, 15);
+		lblNewLabel.setText("Enter File Name");
 	}
 
 	public void createDocument(ArrayList<TabHolder> tabList, String docName) throws Exception {
 		
 		Document doc = new Document(); 
 		DocumentBuilder builder = new DocumentBuilder(doc);
+		
+		Font font = builder.getFont();
+		font.setSize(12);
+		font.setBold(false);
+		font.setColor(Color.BLACK);
+		font.setName("Arial");
+		//font.setUnderline(Underline.DASH);
+		
 		ParagraphFormat paragraphFormat = builder.getParagraphFormat(); 
 		paragraphFormat.setFirstLineIndent(8);
 		paragraphFormat.setAlignment(ParagraphAlignment.JUSTIFY);
+		paragraphFormat.setKeepTogether(true);
+
 		
 		for (int i = 0; i < tabList.size(); i++) {
 			int questionSize = tabList.get(i).getQuestions().size();
@@ -262,8 +275,6 @@ public class appView {
 				for (int k = 0; k < answerSize; k++) {
 					if (tabList.get(i).getQuestions().get(j).getAnswers()
 							.get(k).getButton().getSelection()) {
-						
-						
 						builder.write(tabList.get(i).getQuestions().get(j).getAnswers()
 								.get(k).getfillIn());
 					}
