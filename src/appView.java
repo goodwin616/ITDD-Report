@@ -192,9 +192,9 @@ public class appView {
 
 			// Expand both horizontally and vertically
 
-			TabItem tabItem_1 = new TabItem(tabFolder, SWT.NONE);
-			tabItem_1.setText(tabList.get(i).getName());
-			tabItem_1.setControl(scroll);
+			TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
+			tabItem.setText(tabList.get(i).getName());
+			tabItem.setControl(scroll);
 		}
 
 		Button btnCreateDocument = new Button(shlItDueDiligence, SWT.NONE);
@@ -300,13 +300,13 @@ public class appView {
 	        retVal = docName + ".docx";
 		}
 		
-		MessageBox dialog =  new MessageBox(shlItDueDiligence, SWT.CHECK | SWT.OK| SWT.CANCEL);
+		MessageBox dialog =  new MessageBox(shlItDueDiligence, SWT.YES| SWT.NO);
 			dialog.setText("ITDD Report");
-			dialog.setMessage("Diligence report created with name: " + retVal + "\n\nDo you want to close the application? Press OK");
+			dialog.setMessage("Diligence report created with name: " + retVal + "\n\nWould you like to exit the application?");
 
 				// open dialog and await user selection
 		int ret = dialog.open();
-		if (ret == 32) {
+		if (ret == 64) {
 			System.out.println("Exiting program...");
 			System.exit(0);
 		}
