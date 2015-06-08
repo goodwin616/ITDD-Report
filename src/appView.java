@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -10,7 +11,6 @@ import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -18,13 +18,15 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.swt.widgets.Text;
 
 import com.aspose.words.Document;
 import com.aspose.words.DocumentBuilder;
-import com.aspose.words.Paragraph;
 import com.aspose.words.ParagraphAlignment;
 import com.aspose.words.ParagraphFormat;
 
@@ -100,6 +102,7 @@ public class appView {
 	}
 
 	protected Shell shell;
+	private Text txtOutputdocx;
 
 	/**
 	 * Launch the application.
@@ -168,7 +171,7 @@ public class appView {
 				Group group = new Group(composite, SWT.NONE);
 				GridData gd_group = new GridData(SWT.LEFT, SWT.CENTER, false,
 						false, 1, 1);
-				gd_group.widthHint = 441;
+				gd_group.widthHint = 415;
 				group.setLayoutData(gd_group);
 				group.setText(questionList.get(j).getQuestion());
 				group.setLayout(new GridLayout(1, false));
@@ -198,7 +201,7 @@ public class appView {
 			public void widgetSelected(SelectionEvent e) {
 				
 				try {
-					createDocument(tabList);
+					createDocument(tabList, txtOutputdocx.getText());
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -232,9 +235,18 @@ public class appView {
 		});
 		btnCreateDocument.setBounds(326, 543, 128, 25);
 		btnCreateDocument.setText("Create Document");
+		
+		txtOutputdocx = new Text(shell, SWT.BORDER);
+		txtOutputdocx.setText("output");
+		txtOutputdocx.setToolTipText("w/o extension");
+		txtOutputdocx.setBounds(73, 545, 240, 21);
+		
+		Label lblNewLabel = new Label(shell, SWT.NONE);
+		lblNewLabel.setBounds(10, 548, 55, 15);
+		lblNewLabel.setText("File Name");
 	}
 
-	public void createDocument(ArrayList<TabHolder> tabList) throws Exception {
+	public void createDocument(ArrayList<TabHolder> tabList, String docName) throws Exception {
 		
 		Document doc = new Document(); 
 		DocumentBuilder builder = new DocumentBuilder(doc);
@@ -259,8 +271,35 @@ public class appView {
 			}
 			builder.writeln();
 		}
-        doc.save("Out.docx");
+		
+		
+		// Document Name Data Validation
+		String retVal = "";
+		String[] words = docName.split(Pattern.quote("."));
+		if(words[words.length-1].equalsIgnoreCase("docx") || words[words.length-1].equalsIgnoreCase("doc")) {
+			String newDocName = "";
+			for (int i = 0; i < words.length-1; i++) {
+				newDocName = newDocName + words[i] + ".";
+			}
+			newDocName += "docx";
+			doc.save(newDocName);
+			retVal = newDocName;
+		}
+		else {
+	        doc.save(docName + ".docx");
+	        retVal = docName + ".docx";
+		}
+		
+		MessageBox dialog =  new MessageBox(shell, SWT.ICON_QUESTION | SWT.OK| SWT.CANCEL);
+			dialog.setText("ITDD Report");
+			dialog.setMessage("Document Created with name: " + retVal + "\n\nDo you want to close the application? Press OK");
 
+				// open dialog and await user selection
+		int ret = dialog.open();
+		System.out.println(ret);
+		if (ret == 32) {
+			System.exit(0);
+		}
 		return;
 	}
 
