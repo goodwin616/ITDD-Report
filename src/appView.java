@@ -180,6 +180,7 @@ public class appView {
 					Button button = new Button(group, SWT.RADIO);
 					button.setText(questionList.get(j).getAnswers().get(k)
 							.getAnswer());
+					button.setToolTipText(questionList.get(j).getAnswers().get(k).getfillIn());
 					if (k == numAns-1) {
 						button.setSelection(true);
 					}
@@ -238,8 +239,7 @@ public class appView {
 		
 		txtOutputdocx = new Text(shell, SWT.BORDER);
 		txtOutputdocx.setText("output");
-		txtOutputdocx.setToolTipText("w/o extension");
-		txtOutputdocx.setBounds(73, 545, 240, 21);
+		txtOutputdocx.setBounds(73, 545, 204, 21);
 		
 		Label lblNewLabel = new Label(shell, SWT.NONE);
 		lblNewLabel.setBounds(10, 548, 55, 15);
@@ -292,12 +292,12 @@ public class appView {
 		
 		MessageBox dialog =  new MessageBox(shell, SWT.ICON_QUESTION | SWT.OK| SWT.CANCEL);
 			dialog.setText("ITDD Report");
-			dialog.setMessage("Document Created with name: " + retVal + "\n\nDo you want to close the application? Press OK");
+			dialog.setMessage("Diligence report created with name: " + retVal + "\n\nDo you want to close the application? Press OK");
 
 				// open dialog and await user selection
 		int ret = dialog.open();
-		System.out.println(ret);
 		if (ret == 32) {
+			System.out.println("Exiting program...");
 			System.exit(0);
 		}
 		return;
@@ -326,7 +326,6 @@ public class appView {
 					while (!line.equals("*--")) {
 						// if true start new question
 						if (line.equals("---")) {
-							System.out.println("question");
 							line = textReader.readLine();
 							QGroup g = new QGroup(line,
 									new ArrayList<answerSelections>());
