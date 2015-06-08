@@ -31,7 +31,6 @@ import com.aspose.words.DocumentBuilder;
 import com.aspose.words.Font;
 import com.aspose.words.ParagraphAlignment;
 import com.aspose.words.ParagraphFormat;
-import com.aspose.words.Underline;
 
 
 public class appView {
@@ -103,7 +102,7 @@ public class appView {
 		}
 	}
 
-	protected Shell shell;
+	protected Shell shlItDueDiligence;
 	private Text txtOutputdocx;
 
 	/**
@@ -125,9 +124,9 @@ public class appView {
 	 */
 	public void open() {
 		createContents();
-		shell.open();
-		shell.layout();
-		while (!shell.isDisposed()) {
+		shlItDueDiligence.open();
+		shlItDueDiligence.layout();
+		while (!shlItDueDiligence.isDisposed()) {
 			if (!display.readAndDispatch()) {
 				display.sleep();
 			}
@@ -138,22 +137,22 @@ public class appView {
 	 * Create contents of the window.
 	 */
 	protected void createContents() {
-		shell = new Shell();
-		shell.setSize(480, 616);
-		shell.setText("ITDD");
-		System.out.println("Parsing test1.txt");
+		shlItDueDiligence = new Shell();
+		shlItDueDiligence.setSize(551, 616);
+		shlItDueDiligence.setText("IT Due Diligence Report Generator");
+		System.out.println("Parsing default.ITDD.txt");
 		ArrayList<TabHolder> tabList = parseInput();
 		System.out.println("End parse, Launching ITDD Document Creator");
 		
-		TabFolder tabFolder = new TabFolder(shell, SWT.H_SCROLL | SWT.V_SCROLL);
-		tabFolder.setBounds(0, 10, 464, 527);
+		TabFolder tabFolder = new TabFolder(shlItDueDiligence, SWT.H_SCROLL | SWT.V_SCROLL);
+		tabFolder.setBounds(0, 10, 535, 527);
 		
 		for (int i = 0; i < tabList.size(); i++) {
 
 			ArrayList<QGroup> questionList = tabList.get(i).getQuestions();
 
 			ScrolledComposite scroll = new ScrolledComposite(tabFolder,
-					SWT.V_SCROLL | SWT.BORDER);
+					SWT.V_SCROLL);
 			Composite composite = new Composite(scroll, SWT.NONE);
 
 			scroll.setContent(composite);
@@ -173,7 +172,7 @@ public class appView {
 				Group group = new Group(composite, SWT.NONE);
 				GridData gd_group = new GridData(SWT.LEFT, SWT.CENTER, false,
 						false, 1, 1);
-				gd_group.widthHint = 415;
+				gd_group.widthHint = 480;
 				group.setLayoutData(gd_group);
 				group.setText(questionList.get(j).getQuestion());
 				group.setLayout(new GridLayout(1, false));
@@ -198,7 +197,7 @@ public class appView {
 			tabItem_1.setControl(scroll);
 		}
 
-		Button btnCreateDocument = new Button(shell, SWT.NONE);
+		Button btnCreateDocument = new Button(shlItDueDiligence, SWT.NONE);
 		btnCreateDocument.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -237,14 +236,14 @@ public class appView {
 
 			}
 		});
-		btnCreateDocument.setBounds(326, 543, 128, 25);
+		btnCreateDocument.setBounds(397, 543, 128, 25);
 		btnCreateDocument.setText("Create Document");
 		
-		txtOutputdocx = new Text(shell, SWT.BORDER);
+		txtOutputdocx = new Text(shlItDueDiligence, SWT.BORDER);
 		txtOutputdocx.setText("output");
-		txtOutputdocx.setBounds(100, 545, 220, 21);
+		txtOutputdocx.setBounds(104, 545, 269, 21);
 		
-		Label lblNewLabel = new Label(shell, SWT.NONE);
+		Label lblNewLabel = new Label(shlItDueDiligence, SWT.NONE);
 		lblNewLabel.setBounds(10, 548, 88, 15);
 		lblNewLabel.setText("Enter File Name");
 	}
@@ -301,7 +300,7 @@ public class appView {
 	        retVal = docName + ".docx";
 		}
 		
-		MessageBox dialog =  new MessageBox(shell, SWT.ICON_QUESTION | SWT.OK| SWT.CANCEL);
+		MessageBox dialog =  new MessageBox(shlItDueDiligence, SWT.CHECK | SWT.OK| SWT.CANCEL);
 			dialog.setText("ITDD Report");
 			dialog.setMessage("Diligence report created with name: " + retVal + "\n\nDo you want to close the application? Press OK");
 
@@ -315,7 +314,7 @@ public class appView {
 	}
 
 	public ArrayList<TabHolder> parseInput() {
-		String filename = "test1.txt";
+		String filename = "default.ITDD.txt";
 		File file = new File(filename);
 		try {
 			// Read in text file
