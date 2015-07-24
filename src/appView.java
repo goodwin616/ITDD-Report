@@ -1,10 +1,12 @@
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
+
 // SWT Imports
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -25,12 +27,14 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
+
 // Aspose Imports
 import com.aspose.words.Document;
 import com.aspose.words.DocumentBuilder;
 import com.aspose.words.Font;
 import com.aspose.words.ParagraphAlignment;
 import com.aspose.words.ParagraphFormat;
+
 import org.eclipse.wb.swt.SWTResourceManager;
 
 public class appView {
@@ -297,6 +301,16 @@ public class appView {
 			doc.save(newDocName);
 			retVal = newDocName;
 		} else {
+//			try {
+//				doc.save(docName + ".docx");
+//			} 
+//			catch (FileNotFoundException name) {
+//				MessageBox alert = new MessageBox(shlItDueDiligence, SWT.RETRY | SWT.IGNORE);
+//				alert.setText("ITDD Report");
+//				alert.setMessage("The report " + docName + ".docx is already open.\n\nPlease close the document and try again");
+//				int ret = alert.open();
+//				if (ret == SWT.RETRY )
+//			}
 			doc.save(docName + ".docx");
 			retVal = docName + ".docx";
 		}

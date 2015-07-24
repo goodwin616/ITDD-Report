@@ -18,3 +18,11 @@ RED!		Another fill in that corresponds to the answer
 ^^^			Indicates the end of a question
 *--- 		Indicates the end of a tab
 END			Indicates End of File
+
+
+
+Special Chars in Fillins
+^ == single newline
+^^ == double newline
+
+
