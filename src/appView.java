@@ -55,7 +55,11 @@ public class appView {
 			return questions;
 		}
 	}
-
+/**
+ * 
+ * Description - A question with all the possible answers 
+ *
+ */
 	class QGroup {
 		private String question;
 		private ArrayList<answerSelections> answers;
@@ -73,7 +77,11 @@ public class appView {
 			return answers;
 		}
 	}
-
+/**
+ * 
+ * Description - an answer with has the answer, what gets filled into the doc, and a button
+ *
+ */
 	class answerSelections {
 		private String answer;
 		private String fillIn;
@@ -139,7 +147,7 @@ public class appView {
 	protected void createContents() {
 		shlItDueDiligence = new Shell();
 		shlItDueDiligence.setSize(551, 616);
-		shlItDueDiligence.setText("IT Due Diligence Report Generator");
+		shlItDueDiligence.setText("IT Diligence Tagline Generator");
 		System.out.println("Parsing default.ITDD.txt");
 		ArrayList<TabHolder> tabList = parseInput();
 		System.out.println("End parse, Launching ITDD Document Creator");
@@ -274,8 +282,16 @@ public class appView {
 				for (int k = 0; k < answerSize; k++) {
 					if (tabList.get(i).getQuestions().get(j).getAnswers()
 							.get(k).getButton().getSelection()) {
-						builder.write(tabList.get(i).getQuestions().get(j).getAnswers()
-								.get(k).getfillIn());
+						String fillIn = tabList.get(i).getQuestions().get(j).getAnswers()
+								.get(k).getfillIn();
+//						String[] words = fillIn.split(Pattern.quote("\n"));
+//						if (words.length > 1) {
+//							for (int m = 0; m < words.length - 1; m++) {
+//								
+//							}
+//						}
+						builder.write(fillIn);
+						
 					}
 				}
 			}
