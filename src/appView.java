@@ -118,7 +118,7 @@ public class appView {
 	}
 
 	protected Shell shlItDueDiligence;
-	private Text txtOutputdocx;
+	private Text fileName;
 
 	/**
 	 * Launch the application.
@@ -221,45 +221,19 @@ public class appView {
 			public void widgetSelected(SelectionEvent e) {
 
 				try {
-					createDocument(tabList, txtOutputdocx.getText());
+					createDocument(tabList, fileName.getText());
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
-
-				// Print out all answers to command line
-				// for (int i = 0; i < tabList.size(); i++) {
-				// int questionSize = tabList.get(i).getQuestions().size();
-				// for (int j = 0; j < questionSize; j++) {
-				// int answerSize = tabList.get(i).getQuestions().get(j)
-				// .getAnswers().size();
-				// for (int k = 0; k < answerSize; k++) {
-				// if (tabList.get(i).getQuestions().get(j)
-				// .getAnswers().get(k).getButton()
-				// .getSelection()) {
-				// System.out.println("For Question: "
-				// + tabList.get(i).getQuestions().get(j)
-				// .getQuestion()
-				// + ", you selected "
-				// + tabList.get(i).getQuestions().get(j)
-				// .getAnswers().get(k)
-				// .getAnswer()
-				// + " which corresponds to ... "
-				// + tabList.get(i).getQuestions().get(j)
-				// .getAnswers().get(k)
-				// .getfillIn());
-				// }
-				// }
-				// }
-				// }
 
 			}
 		});
 		btnCreateDocument.setBounds(397, 543, 128, 25);
 		btnCreateDocument.setText("Create Document");
 
-		txtOutputdocx = new Text(shlItDueDiligence, SWT.BORDER);
-		txtOutputdocx.setText("output");
-		txtOutputdocx.setBounds(104, 545, 269, 21);
+		fileName = new Text(shlItDueDiligence, SWT.BORDER);
+		fileName.setText("output");
+		fileName.setBounds(104, 545, 269, 21);
 
 		Label lblNewLabel = new Label(shlItDueDiligence, SWT.NONE);
 		lblNewLabel.setBounds(10, 548, 88, 15);
@@ -273,7 +247,7 @@ public class appView {
 		DocumentBuilder builder = new DocumentBuilder(doc);
 
 		Font font = builder.getFont();
-		font.setSize(12);
+		font.setSize(10);
 		font.setBold(false);
 		font.setColor(Color.BLACK);
 		font.setName("Arial");
@@ -294,14 +268,16 @@ public class appView {
 							.get(k).getButton().getSelection()) {
 						String fillIn = tabList.get(i).getQuestions().get(j)
 								.getAnswers().get(k).getfillIn();
-						// String[] words = fillIn.split(Pattern.quote("\n"));
-						// if (words.length > 1) {
-						// for (int m = 0; m < words.length - 1; m++) {
-						//
-						// }
-						// }
-						builder.write(fillIn);
-
+						String[] words = fillIn.split("\\^");
+						if (words.length > 1) {
+							for (int a = 0; a < words.length-1; a++) {
+								builder.writeln(words[a]);
+							}
+							builder.write(words[words.length - 1]);
+						}
+						else {
+							builder.write(fillIn);
+						}
 					}
 				}
 			}
