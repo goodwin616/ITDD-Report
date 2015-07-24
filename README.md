@@ -5,7 +5,7 @@ This Java application will allow for the rapid generation of diligence reports t
 
 --------------
 
-Explanation for how default.ITDD.txt works
+Explanation for how default.ITDD.txt works\n
 
 *--     	Indicates the beginning and ending of "tabs" in the application
 Systems 	Indicates the name of the "tab" in the application
