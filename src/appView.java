@@ -5,7 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
-
+// SWT Imports
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ControlAdapter;
@@ -25,19 +25,23 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
-
+// Aspose Imports
 import com.aspose.words.Document;
 import com.aspose.words.DocumentBuilder;
 import com.aspose.words.Font;
 import com.aspose.words.ParagraphAlignment;
 import com.aspose.words.ParagraphFormat;
-
+import org.eclipse.wb.swt.SWTResourceManager;
 
 public class appView {
 
 	final Display display = Display.getDefault();
 
-	
+	/**
+	 * Class for a tab which has a name and questions
+	 * 
+	 *
+	 */
 	class TabHolder {
 		private String name;
 		private ArrayList<QGroup> questions;
@@ -55,11 +59,12 @@ public class appView {
 			return questions;
 		}
 	}
-/**
- * 
- * Description - A question with all the possible answers 
- *
- */
+
+	/**
+	 * 
+	 * Description - A question with all the possible answers
+	 *
+	 */
 	class QGroup {
 		private String question;
 		private ArrayList<answerSelections> answers;
@@ -77,11 +82,13 @@ public class appView {
 			return answers;
 		}
 	}
-/**
- * 
- * Description - an answer with has the answer, what gets filled into the doc, and a button
- *
- */
+
+	/**
+	 * 
+	 * Description - an answer with has the answer, what gets filled into the
+	 * doc, and a button
+	 *
+	 */
 	class answerSelections {
 		private String answer;
 		private String fillIn;
@@ -151,10 +158,12 @@ public class appView {
 		System.out.println("Parsing default.ITDD.txt");
 		ArrayList<TabHolder> tabList = parseInput();
 		System.out.println("End parse, Launching ITDD Document Creator");
-		
-		TabFolder tabFolder = new TabFolder(shlItDueDiligence, SWT.H_SCROLL | SWT.V_SCROLL);
+
+		TabFolder tabFolder = new TabFolder(shlItDueDiligence, SWT.H_SCROLL
+				| SWT.V_SCROLL);
+		tabFolder.setBackground(SWTResourceManager.getColor(SWT.COLOR_TITLE_BACKGROUND_GRADIENT));
 		tabFolder.setBounds(0, 10, 535, 527);
-		
+
 		for (int i = 0; i < tabList.size(); i++) {
 
 			ArrayList<QGroup> questionList = tabList.get(i).getQuestions();
@@ -189,8 +198,9 @@ public class appView {
 					Button button = new Button(group, SWT.RADIO);
 					button.setText(questionList.get(j).getAnswers().get(k)
 							.getAnswer());
-					button.setToolTipText(questionList.get(j).getAnswers().get(k).getfillIn());
-					if (k == numAns-1) {
+					button.setToolTipText(questionList.get(j).getAnswers()
+							.get(k).getfillIn());
+					if (k == numAns - 1) {
 						button.setSelection(true);
 					}
 					tabList.get(i).getQuestions().get(j).getAnswers().get(k)
@@ -209,71 +219,71 @@ public class appView {
 		btnCreateDocument.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				
+
 				try {
 					createDocument(tabList, txtOutputdocx.getText());
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
-				
-//		Print out all answers to command line
-//				for (int i = 0; i < tabList.size(); i++) {
-//					int questionSize = tabList.get(i).getQuestions().size();
-//					for (int j = 0; j < questionSize; j++) {
-//						int answerSize = tabList.get(i).getQuestions().get(j)
-//								.getAnswers().size();
-//						for (int k = 0; k < answerSize; k++) {
-//							if (tabList.get(i).getQuestions().get(j)
-//									.getAnswers().get(k).getButton()
-//									.getSelection()) {
-//								System.out.println("For Question: "
-//										+ tabList.get(i).getQuestions().get(j)
-//												.getQuestion()
-//										+ ", you selected "
-//										+ tabList.get(i).getQuestions().get(j)
-//												.getAnswers().get(k)
-//												.getAnswer()
-//										+ " which corresponds to ... "
-//										+ tabList.get(i).getQuestions().get(j)
-//												.getAnswers().get(k)
-//												.getfillIn());
-//							}
-//						}
-//					}
-//				}
+
+				// Print out all answers to command line
+				// for (int i = 0; i < tabList.size(); i++) {
+				// int questionSize = tabList.get(i).getQuestions().size();
+				// for (int j = 0; j < questionSize; j++) {
+				// int answerSize = tabList.get(i).getQuestions().get(j)
+				// .getAnswers().size();
+				// for (int k = 0; k < answerSize; k++) {
+				// if (tabList.get(i).getQuestions().get(j)
+				// .getAnswers().get(k).getButton()
+				// .getSelection()) {
+				// System.out.println("For Question: "
+				// + tabList.get(i).getQuestions().get(j)
+				// .getQuestion()
+				// + ", you selected "
+				// + tabList.get(i).getQuestions().get(j)
+				// .getAnswers().get(k)
+				// .getAnswer()
+				// + " which corresponds to ... "
+				// + tabList.get(i).getQuestions().get(j)
+				// .getAnswers().get(k)
+				// .getfillIn());
+				// }
+				// }
+				// }
+				// }
 
 			}
 		});
 		btnCreateDocument.setBounds(397, 543, 128, 25);
 		btnCreateDocument.setText("Create Document");
-		
+
 		txtOutputdocx = new Text(shlItDueDiligence, SWT.BORDER);
 		txtOutputdocx.setText("output");
 		txtOutputdocx.setBounds(104, 545, 269, 21);
-		
+
 		Label lblNewLabel = new Label(shlItDueDiligence, SWT.NONE);
 		lblNewLabel.setBounds(10, 548, 88, 15);
 		lblNewLabel.setText("Enter File Name");
 	}
 
-	public void createDocument(ArrayList<TabHolder> tabList, String docName) throws Exception {
-		
-		Document doc = new Document(); 
+	public void createDocument(ArrayList<TabHolder> tabList, String docName)
+			throws Exception {
+
+		Document doc = new Document();
 		DocumentBuilder builder = new DocumentBuilder(doc);
-		
+
 		Font font = builder.getFont();
 		font.setSize(12);
 		font.setBold(false);
 		font.setColor(Color.BLACK);
 		font.setName("Arial");
-		//font.setUnderline(Underline.DASH);
-		
-		ParagraphFormat paragraphFormat = builder.getParagraphFormat(); 
+		// font.setUnderline(Underline.DASH);
+
+		ParagraphFormat paragraphFormat = builder.getParagraphFormat();
 		paragraphFormat.setFirstLineIndent(8);
 		paragraphFormat.setAlignment(ParagraphAlignment.JUSTIFY);
 		paragraphFormat.setKeepTogether(true);
 
-		
 		for (int i = 0; i < tabList.size(); i++) {
 			int questionSize = tabList.get(i).getQuestions().size();
 			for (int j = 0; j < questionSize; j++) {
@@ -282,45 +292,45 @@ public class appView {
 				for (int k = 0; k < answerSize; k++) {
 					if (tabList.get(i).getQuestions().get(j).getAnswers()
 							.get(k).getButton().getSelection()) {
-						String fillIn = tabList.get(i).getQuestions().get(j).getAnswers()
-								.get(k).getfillIn();
-//						String[] words = fillIn.split(Pattern.quote("\n"));
-//						if (words.length > 1) {
-//							for (int m = 0; m < words.length - 1; m++) {
-//								
-//							}
-//						}
+						String fillIn = tabList.get(i).getQuestions().get(j)
+								.getAnswers().get(k).getfillIn();
+						// String[] words = fillIn.split(Pattern.quote("\n"));
+						// if (words.length > 1) {
+						// for (int m = 0; m < words.length - 1; m++) {
+						//
+						// }
+						// }
 						builder.write(fillIn);
-						
+
 					}
 				}
 			}
 			builder.writeln();
 		}
-		
-		
+
 		// Document Name Data Validation
 		String retVal = "";
 		String[] words = docName.split(Pattern.quote("."));
-		if(words[words.length-1].equalsIgnoreCase("docx") || words[words.length-1].equalsIgnoreCase("doc")) {
+		if (words[words.length - 1].equalsIgnoreCase("docx")
+				|| words[words.length - 1].equalsIgnoreCase("doc")) {
 			String newDocName = "";
-			for (int i = 0; i < words.length-1; i++) {
+			for (int i = 0; i < words.length - 1; i++) {
 				newDocName = newDocName + words[i] + ".";
 			}
 			newDocName += "docx";
 			doc.save(newDocName);
 			retVal = newDocName;
+		} else {
+			doc.save(docName + ".docx");
+			retVal = docName + ".docx";
 		}
-		else {
-	        doc.save(docName + ".docx");
-	        retVal = docName + ".docx";
-		}
-		
-		MessageBox dialog =  new MessageBox(shlItDueDiligence, SWT.YES| SWT.NO);
-			dialog.setText("ITDD Report");
-			dialog.setMessage("Diligence report created with name: " + retVal + "\n\nWould you like to exit the application?");
 
-				// open dialog and await user selection
+		MessageBox dialog = new MessageBox(shlItDueDiligence, SWT.YES | SWT.NO);
+		dialog.setText("ITDD Report");
+		dialog.setMessage("Diligence report created with name: " + retVal
+				+ "\n\nWould you like to exit the application?");
+
+		// open dialog and await user selection
 		int ret = dialog.open();
 		if (ret == 64) {
 			System.out.println("Exiting program...");
@@ -364,7 +374,8 @@ public class appView {
 										new answerSelections(answer, fillIn));
 								line = textReader.readLine();
 							}
-							g.getAnswers().add(new answerSelections("Not Applicable", ""));
+							g.getAnswers().add(
+									new answerSelections("Not Applicable", ""));
 							tab.getQuestions().add(g);
 							line = textReader.readLine();
 						}
